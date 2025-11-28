@@ -1,0 +1,89 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: latinxua
+  name: 拉丁化
+  version: '0.1'
+  author:
+    - 物灵 <mat-ling@139.com>
+  description: |
+     Shjyng Latinxua Sin Wenz shurhu.
+     
+     测试，有错字。
+
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: simplification
+    states: [ 漢字, 汉字 ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - fluency_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator@custom_phrase
+    - reverse_lookup_translator
+    - script_translator
+  filters:
+    - simplifier
+    - uniquifier
+
+speller:
+  alphabet: zyxwvutsrponmlkjihgfedcba
+  delimiter: "'"
+  use_space: true
+  algebra:
+    - "xform/jy/'y/"
+    - "xform/ji/'i/"
+    - "xform/j/'i/"
+
+translator:
+  dictionary: latinxua
+  prism: latinxua
+  preedit_format:
+    - "xform/[ ']|^|$/ /"
+
+custom_phrase:
+  dictionary: ""
+  user_dict: custom_phrase
+  db_class: stabledb
+  enable_completion: false
+  enable_sentence: false
+  initial_quality: 1
+
+reverse_lookup:
+  dictionary: wubi86_super
+  prefix: "`"
+  suffix: "'"
+  tips: 〔反查〕
+
+punctuator:
+  import_preset: symbols
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
+  patterns:
+    reverse_lookup: "`[a-z]*'?$"
+    punct: "/[0-9a-z]*'?$"
